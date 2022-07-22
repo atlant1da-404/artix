@@ -2,6 +2,7 @@ package document
 
 import (
 	"errors"
+	"fmt"
 	"github.com/atlant1da-404/artik_db/pkg/hash"
 )
 
@@ -15,7 +16,7 @@ func New() *Document {
 	}
 }
 
-func (d *Document) Create(data interface{}) (interface{}, error) {
+func (d *Document) Create(data []byte) (interface{}, error) {
 
 	if data == nil {
 		return data, errors.New(documentSizeErr)
@@ -25,4 +26,10 @@ func (d *Document) Create(data interface{}) (interface{}, error) {
 	d.values[uuid] = data
 
 	return data, nil
+}
+
+func (d *Document) GetAll(name string, buck []byte, data interface{}) error {
+
+	fmt.Println(buck)
+	return nil
 }

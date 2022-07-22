@@ -1,6 +1,7 @@
 package bucket
 
 import (
+	"encoding/json"
 	"errors"
 	"github.com/atlant1da-404/artik_db/pkg/document"
 )
@@ -12,14 +13,14 @@ type (
 	}
 	bucket struct {
 		Bucket
-		bucket map[string][]interface{}
+		bucket map[string][]byte
 		doc    *document.Document
 	}
 )
 
 func New() *bucket {
 	return &bucket{
-		bucket: make(map[string][]interface{}),
+		bucket: make(map[string][]byte),
 		doc:    document.New(),
 	}
 }
@@ -34,28 +35,25 @@ func (b *bucket) CreateBucket(name string) error {
 	return nil
 }
 
-func (b *bucket) InsertIntoBucket(name, data string) error {
+func (b *bucket) InsertIntoBucket(name string, data []byte) error {
 
 	if _, ok := b.bucket[name]; ok {
 
-		data, err := b.doc.Create(data)
-		if err != nil {
-			return err
+		for _, docs := range data {
+			b.bucket[name] = append(b.bucket[name], docs)
 		}
 
-		b.bucket[name] = append(b.bucket[name], data)
 		return nil
 	}
 
 	return errors.New(bucketNotFound)
 }
 
-func (b *bucket) GetAll(name string) ([]interface{}, error) {
+func (b *bucket) GetAllFromBucket(name string, data interface{}) error {
 
-	if data, ok := b.bucket[name]; ok {
-
-		return data, nil
+	if val, ok := b.bucket[name]; ok {
+		return json.Unmarshal(val, data)
 	}
 
-	return nil, errors.New(bucketNotFound)
+	return errors.New(bucketNotFound)
 }

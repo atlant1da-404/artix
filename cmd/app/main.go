@@ -1,12 +1,17 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/atlant1da-404/artik_db/pkg/authenticate"
 	"github.com/atlant1da-404/artik_db/pkg/bucket"
 	"github.com/atlant1da-404/artik_db/pkg/config"
 	"log"
 )
+
+type User struct {
+	Username string `json:"username"`
+}
 
 func main() {
 
@@ -22,11 +27,21 @@ func main() {
 		log.Fatalln(err.Error())
 	}
 
-	if err := head.InsertIntoBucket("mongo", "hello world"); err != nil {
+	user := &User{
+		Username: "rocket",
+	}
+
+	b, _ := json.Marshal(user)
+
+	if err := head.InsertIntoBucket("mongo", b); err != nil {
 		log.Fatalln(err.Error())
 	}
 
-	data, _ := head.GetAll("mongo")
+	var getUser User
 
-	fmt.Println(data)
+	if err := head.GetAllFromBucket("mongo", &getUser); err != nil {
+		log.Fatalln(err.Error())
+	}
+
+	fmt.Println(getUser)
 }
