@@ -17,8 +17,14 @@ func New() *bucket {
 	}
 }
 
-func (b *bucket) Insert(uuid string, data []byte) {
+func (b *bucket) Insert(uuid string, data []byte) error {
+
+	if len(data) == 0 {
+		return errors.New(dataNotFound)
+	}
+
 	b.bucket[uuid] = data
+	return nil
 }
 
 func (b bucket) Get(uuid string, data interface{}) error {
