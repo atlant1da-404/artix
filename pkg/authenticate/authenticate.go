@@ -1,7 +1,6 @@
 package authenticate
 
 import (
-	"errors"
 	"github.com/atlant1da-404/artik_db/pkg/config"
 )
 
@@ -17,14 +16,14 @@ func New(settings *config.Settings) *Login {
 	}
 }
 
-func (l Login) Required(username, password string) error {
+func (l Login) Required(username, password string) bool {
 
 	if l.Username != username {
-		return errors.New(authenticationErr)
+		return false
 	}
 	if l.Password != password {
-		return errors.New(authenticationErr)
+		return false
 	}
 
-	return nil
+	return true
 }

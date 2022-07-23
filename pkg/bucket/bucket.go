@@ -23,6 +23,12 @@ func (b *Bucket) Insert(uuid string, data []byte) error {
 		return errors.New(dataNotFound)
 	}
 
+	var test interface{}
+
+	if err := json.Unmarshal([]byte(data), &test); err != nil {
+		return err
+	}
+
 	b.bucket[uuid] = data
 	return nil
 }
@@ -36,6 +42,13 @@ func (b Bucket) Get(uuid string, data interface{}) error {
 
 func (b *Bucket) Update(uuid string, data []byte) error {
 	if _, ok := b.bucket[uuid]; ok {
+
+		var test interface{}
+
+		if err := json.Unmarshal([]byte(data), &test); err != nil {
+			return err
+		}
+
 		b.bucket[uuid] = data
 		return nil
 	}
