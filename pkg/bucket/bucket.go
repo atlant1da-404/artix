@@ -6,18 +6,18 @@ import (
 )
 
 type (
-	bucket struct {
+	Bucket struct {
 		bucket map[string][]byte
 	}
 )
 
-func New() *bucket {
-	return &bucket{
+func New() *Bucket {
+	return &Bucket{
 		bucket: make(map[string][]byte),
 	}
 }
 
-func (b *bucket) Insert(uuid string, data []byte) error {
+func (b *Bucket) Insert(uuid string, data []byte) error {
 
 	if len(data) == 0 {
 		return errors.New(dataNotFound)
@@ -27,14 +27,14 @@ func (b *bucket) Insert(uuid string, data []byte) error {
 	return nil
 }
 
-func (b bucket) Get(uuid string, data interface{}) error {
+func (b Bucket) Get(uuid string, data interface{}) error {
 	if val, ok := b.bucket[uuid]; ok {
 		return json.Unmarshal(val, data)
 	}
 	return errors.New(bucketNotFound)
 }
 
-func (b *bucket) Update(uuid string, data []byte) error {
+func (b *Bucket) Update(uuid string, data []byte) error {
 	if _, ok := b.bucket[uuid]; ok {
 		b.bucket[uuid] = data
 		return nil
@@ -42,7 +42,7 @@ func (b *bucket) Update(uuid string, data []byte) error {
 	return errors.New(bucketNotFound)
 }
 
-func (b *bucket) Delete(uuid string) error {
+func (b *Bucket) Delete(uuid string) error {
 	if _, ok := b.bucket[uuid]; ok {
 		delete(b.bucket, uuid)
 		return nil
