@@ -1,8 +1,7 @@
 package main
 
-import "fmt"
+import "github.com/atlant1da-404/artik_db/pkg/tcp"
 
 func main() {
-
-	fmt.Println("Hello world")
+	tcp.NewServer()
 }
